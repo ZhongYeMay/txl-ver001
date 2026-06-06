@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>建立我的个人主页</title>
-    <!-- 引入 Supabase 官方极速控制库 -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -224,6 +223,7 @@
             const avatarUrl = await uploadToCloud(refs.in_avatar.files[0], 'avatar');
             const bgUrl = await uploadToCloud(refs.in_bg.files[0], 'bg');
 
+            // ⭐ 精准纠正：将 message 改回你代码底层原汁原味的 signature！
             const model = {
                 name: refs.in_name.value.trim(),
                 nickname: refs.in_tag.value.trim(),
@@ -241,7 +241,7 @@
                 destination: refs.in_destination.value.trim(),
                 mind: refs.in_mind.value.trim(),
                 dream: refs.in_dream.value.trim(),
-                message: refs.in_sig.value.trim(),
+                signature: refs.in_sig.value.trim(), 
                 future: refs.in_future.value.trim(),
                 motto: refs.in_motto.value.trim() || '行远自迩，笃行不怠',
                 avatar_url: avatarUrl,
@@ -259,7 +259,6 @@
                 if (error) throw error;
             }
 
-            // 完全不改文件名，精准跳转到原装英文 success.html 页面
             window.location.href = 'success.html';
 
         } catch (err) {
