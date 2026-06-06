@@ -19,9 +19,13 @@
 <div class="success-card">
     <div class="icon">🎉</div>
     <h2>同步云端成功！</h2>
-    <p>老同学们打开首页就能看到 you 独特的自定义主页啦。</p>
-    <a href="index.html" class="btn-home">返回同学录首页</a>
+    <p>老同学们打开首页就能看到你独特的自定义主页啦。</p>
+    <a href="index.html" id="homeLink" class="btn-home">返回同学录首页</a>
 </div>
 
+<script>
+    // 强制清除首页死缓存
+    document.getElementById('homeLink').href = 'index.html?t=' + Date.now();
+</script>
 </body>
 </html>
