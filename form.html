@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>建立我的个人主页</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif; background-color: #f7f9fc; color: #262626; padding-bottom: 40px; }
+        .container { width: 100%; max-width: 640px; margin: 0 auto; padding: 16px; }
+        
+        .header-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .btn-back { color: #1677ff; text-decoration: none; font-size: 0.95rem; }
+
+        .card-panel { background: #ffffff; padding: 20px; border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); margin-bottom: 20px; }
+        .card-panel h2 { font-size: 1.3rem; margin-bottom: 16px; color: #1f1f1f; border-bottom: 2px solid #f0f0f0; padding-bottom: 6px; }
+        .panel-section-title { font-size: 0.95rem; color: #1677ff; font-weight: bold; margin: 15px 0 10px 0; display: flex; align-items: center; gap: 4px; }
+
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: #434343; }
+        .form-group input[type="text"], .form-group input[type="tel"], .form-group input[type="email"], .form-group textarea { width: 100%; padding: 11px; border: 1px solid #d9d9d9; border-radius: 8px; font-size: 0.95rem; background: #fafafa; transition: all 0.2s; }
+        .form-group input:focus, .form-group textarea:focus { border-color: #1677ff; background: #ffffff; outline: none; }
+
+        .preview-box { background: #f9f9f9; border: 1px dashed #d9d9d9; border-radius: 12px; padding: 12px; margin: 20px 0; }
+        .preview-title { font-size: 0.8rem; color: #8c8c8c; margin-bottom: 12px; text-align: center; }
+        
+        .alumni-card-full { 
+            background: #8c8c8c; border-radius: 14px; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.05); 
+            min-height: 300px; padding: 20px; background-size: cover; background-position: center; position: relative;
+            display: flex; flex-direction: column; justify-content: space-between; transition: background-image 0.3s;
+            text-align: center;
+        }
+        .alumni-card-full::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.45); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 1; }
+        
+        .pre-content-inner { position: relative; z-index: 2; color: white; width: 100%; }
+        .pre-avatar-img { width: 74px; height: 74px; border-radius: 50%; object-fit: cover; background: #ffffff; margin: 0 auto 8px auto; display: block; border: 2px solid rgba(255,255,255,0.6); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .pre-name { font-size: 1.4rem; font-weight: bold; }
+        .pre-tag { display: inline-block; font-size: 0.75rem; background: #1677ff; color: white; padding: 2px 10px; border-radius: 10px; margin-top: 4px; font-weight: bold; }
+        .pre-meta-scroll { margin-top: 10px; font-size: 0.8rem; text-align: left; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 10px; max-height: 120px; overflow-y: auto; }
+        
+        .btn-submit { width: 100%; padding: 14px; background: #1677ff; color: #ffffff; border: none; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(22,119,255,0.2); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-nav">
+        <a href="index.html" class="btn-back">⬅️ 返回首页</a>
+        <span style="font-size:0.9rem; color:#8c8c8c;">全周期同学深度档案卡</span>
+    </div>
+
+    <div class="card-panel">
+        <h2>✍️ 录入我的同学录档案</h2>
+        <form id="alumniForm">
+            
+            <div class="panel-section-title">🔒 核心身份</div>
+            <div class="form-group">
+                <label>基本姓名 *</label>
+                <input type="text" id="in_name" placeholder="请输入你的真实大名" required>
+            </div>
+            <div class="form-group">
+                <label>个性绰号标签</label>
+                <input type="text" id="in_tag" placeholder="例如：纸质卡片上的‘老王’、‘鸽王’">
+            </div>
+            <div class="form-group">
+                <label>微信账号 * (作为独立网址访问的第一密钥)</label>
+                <input type="text" id="in_wechat" placeholder="微信与QQ必填一项以生成专属网址链接" required>
+            </div>
+            <div class="form-group">
+                <label>QQ 号码 *</label>
+                <input type="text" id="in_qq" placeholder="请输入QQ号码" required>
+            </div>
+
+            <div class="panel-section-title">📋 基础通讯档案</div>
+            <div class="form-group">
+                <label>出生日期</label>
+                <input type="text" id="in_birthday" placeholder="例如：2008年10月12日">
+            </div>
+            <div class="form-group">
+                <label>专属星座</label>
+                <input type="text" id="in_constellation" placeholder="例如：天秤座 ⚖️">
+            </div>
+            <div class="form-group">
+                <label>电话号码</label>
+                <input type="tel" id="in_phone" placeholder="请输入你的手机号码">
+            </div>
+            <div class="form-group">
+                <label>电子邮箱</label>
+                <input type="email" id="in_email" placeholder="请输入你的常用邮箱">
+            </div>
+            <div class="form-group">
+                <label>现居城市</label>
+                <input type="text" id="in_city" placeholder="你目前在哪座城市闯荡？">
+            </div>
+
+            <div class="panel-section-title">🖼️ 双重多媒体视觉自定义</div>
+            <div class="form-group">
+                <label>上传我的专属头像文件 *</label>
+                <input type="file" id="in_avatar" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label>选择整页满铺全屏主页背景图 *</label>
+                <input type="file" id="in_bg" accept="image/*">
+            </div>
+
+            <div class="panel-section-title">🎨 个人偏好风向标</div>
+            <div class="form-group">
+                <label>喜欢的电影</label>
+                <input type="text" id="in_movie" placeholder="分享一部你百看不厌的电影">
+            </div>
+            <div class="form-group">
+                <label>喜欢的偶像</label>
+                <input type="text" id="in_idol" placeholder="陪伴你走过青春的一段光辉">
+            </div>
+            <div class="form-group">
+                <label>喜欢的颜色</label>
+                <input type="text" id="in_color" placeholder="比如：湛蓝色、Tiffany蓝">
+            </div>
+            <div class="form-group">
+                <label>喜欢的食物</label>
+                <input type="text" id="in_food" placeholder="深夜最治愈你的美食">
+            </div>
+            <div class="form-group">
+                <label>想去的远方</label>
+                <input type="text" id="in_destination" placeholder="心之所向，想去哪里仗剑走天涯？">
+            </div>
+
+            <div class="panel-section-title">🔮 深度心灵树洞模块</div>
+            <div class="form-group">
+                <label>你心中的我</label>
+                <textarea id="in_mind" rows="2" placeholder="在班级册里，你对我的第一印象或评价是什么？"></textarea>
+            </div>
+            <div class="form-group">
+                <label>心中的梦想</label>
+                <textarea id="in_dream" rows="2" placeholder="当年或者现在，你最想实现的梦想是什么？"></textarea>
+            </div>
+            <div class="form-group">
+                <label>毕业寄语 / 给全班的话</label>
+                <textarea id="in_sig" rows="2" placeholder="留下你想对班级或者多年后的大家说的话..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>十年后自己的样子</label>
+                <textarea id="in_future" rows="2" placeholder="预测或期许一下，十年后的你正在过着怎样的生活？"></textarea>
+            </div>
+            <div class="form-group">
+                <label>人生格言 MOTTO</label>
+                <input type="text" id="in_motto" placeholder="行远自迩，笃行不怠（留空则默认使用此格言）">
+            </div>
+
+            <div class="preview-box">
+                <div class="preview-title">👀 独立主页双多媒体多字段实时预览效果</div>
+                <div class="alumni-card-full" id="preBanner" style="background: linear-gradient(135deg, #8c8c8c, #bfbfbf);">
+                    <div class="pre-content-inner">
+                        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23bfbfbf'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>" class="pre-avatar-img" id="preAvatar">
+                        <div class="pre-name" id="pre_name">未填写</div>
+                        <span class="pre-tag" id="pre_tag">暂无标签</span>
+                    </div>
+                    <div class="pre-content-inner">
+                        <div class="pre-meta-scroll">
+                            <div>🎂 生日：<span id="p_birthday">-</span></div>
+                            <div>🌌 星座：<span id="p_constellation">-</span></div>
+                            <div>🚀 远方：<span id="p_destination">-</span></div>
+                            <div>💭 格言：<span id="p_motto">-</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn-submit" id="btnSubmit">上传同步至云端本地库</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // 字段捕获
+    const f = (id) => document.getElementById(id);
+    const fields = ['in_name','in_tag','in_avatar','in_bg','in_city','in_wechat','in_qq','in_birthday','in_constellation','in_phone','in_email','in_movie','in_idol','in_color','in_food','in_destination','in_mind','in_dream','in_sig','in_future','in_motto'];
+    const refs = {}; fields.forEach(id => refs[id] = f(id));
+
+    let avatarBase64 = "";
+    let bgBase64 = "";
+
+    // 联动预览绑定
+    refs.in_name.addEventListener('input', () => f('pre_name').textContent = refs.in_name.value || '未填写');
+    refs.in_tag.addEventListener('input', () => f('pre_tag').textContent = refs.in_tag.value || '暂无标签');
+    refs.in_birthday.addEventListener('input', () => f('p_birthday').textContent = refs.in_birthday.value || '-');
+    refs.in_constellation.addEventListener('input', () => f('p_constellation').textContent = refs.in_constellation.value || '-');
+    refs.in_destination.addEventListener('input', () => f('p_destination').textContent = refs.in_destination.value || '-');
+    refs.in_motto.addEventListener('input', () => f('p_motto').textContent = refs.in_motto.value || '-');
+
+    refs.in_avatar.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function() { avatarBase64 = this.result; f('preAvatar').src = avatarBase64; }
+            reader.readAsDataURL(file);
+        }
+    });
+
+    refs.in_bg.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function() { bgBase64 = this.result; f('preBanner').style.backgroundImage = `url('${bgBase64}')`; }
+            reader.readAsDataURL(file);
+        }
+    });
+
+    f('btnSubmit').addEventListener('click', function() {
+        if (!refs.in_name.value.trim()) { alert("姓名属于档案必填大项！"); return; }
+        if (!refs.in_wechat.value.trim() && !refs.in_qq.value.trim()) { alert("微信号或QQ号至少填写一项，作为生成独立访问路由的钥匙！"); return; }
+
+        const model = {
+            name: refs.in_name.value.trim(),
+            tag: refs.in_tag.value.trim(),
+            wechat: refs.in_wechat.value.trim(),
+            qq: refs.in_qq.value.trim(),
+            birthday: refs.in_birthday.value.trim(),
+            constellation: refs.in_constellation.value.trim(),
+            phone: refs.in_phone.value.trim(),
+            email: refs.in_email.value.trim(),
+            city: refs.in_city.value.trim(),
+            movie: refs.in_movie.value.trim(),
+            idol: refs.in_idol.value.trim(),
+            color: refs.in_color.value.trim(),
+            food: refs.in_food.value.trim(),
+            destination: refs.in_destination.value.trim(),
+            mind: refs.in_mind.value.trim(),
+            dream: refs.in_dream.value.trim(),
+            signature: refs.in_sig.value.trim(),
+            future: refs.in_future.value.trim(),
+            motto: refs.in_motto.value.trim(),
+            avatarImage: avatarBase64,
+            backgroundImage: bgBase64
+        };
+
+        let list = JSON.parse(localStorage.getItem('alumni_list')) || [];
+        // 用微信号或QQ作为唯一凭证，防止相同标识的卡片重复
+        const primaryKey = model.wechat || model.qq;
+        const targetIdx = list.findIndex(item => (item.wechat === primaryKey || item.qq === primaryKey));
+        
+        if (targetIdx !== -1) {
+            list[targetIdx] = model;
+        } else {
+            list.push(model);
+        }
+
+        localStorage.setItem('alumni_list', JSON.stringify(list));
+        window.location.href = 'success.html';
+    });
+</script>
+
+</body>
+</html>

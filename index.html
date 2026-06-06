@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>初2026届11班｜专属同学录</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif; background-color: #f7f9fc; color: #262626; padding-bottom: 50px; }
+        .container { width: 100%; max-width: 640px; margin: 0 auto; padding: 16px; }
+        a { text-decoration: none; }
+        
+        /* ==================== 班级首页样式 ==================== */
+        #home_view { display: block; }
+        .class-card { background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.04); margin-bottom: 20px; }
+        .class-photo { width: 100%; height: 180px; background: linear-gradient(135deg, #1677ff 0%, #722ed1 100%); background-size: cover; background-position: center; position: relative; display: flex; align-items: flex-end; padding: 16px; }
+        .class-photo::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.35); }
+        .class-title { color: #ffffff; position: relative; z-index: 1; }
+        .class-title h1 { font-size: 1.6rem; font-weight: bold; }
+        .class-title p { font-size: 0.85rem; opacity: 0.85; margin-top: 2px; }
+        .class-details { padding: 16px; }
+        .class-motto { font-size: 0.9rem; color: #595959; font-style: italic; border-left: 3px solid #1677ff; padding-left: 10px; margin-bottom: 12px; }
+        .class-stats { display: flex; justify-content: space-between; background: #f5f5f5; padding: 8px 16px; border-radius: 8px; font-size: 0.85rem; color: #8c8c8c; }
+        .class-stats strong { color: #1677ff; }
+
+        .btn-go-form { display: block; width: 100%; text-align: center; background: #1677ff; color: #ffffff; padding: 14px; border-radius: 12px; font-size: 1.05rem; font-weight: bold; margin-bottom: 24px; box-shadow: 0 4px 14px rgba(22,119,255,0.25); }
+        .list-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 12px; color: #1f1f1f; }
+        .alumni-list { display: flex; flex-direction: column; gap: 16px; }
+        
+        .simple-card { background: white; padding: 16px; border-radius: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); display: flex; justify-content: space-between; align-items: center; border: 1px solid #f0f0f0; transition: all 0.2s; }
+        .simple-main { display: flex; align-items: center; gap: 12px; }
+        .simple-avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; background: #e8e8e8; border: 1px solid #e1e1e1; }
+        .simple-info h3 { font-size: 1.1rem; color: #1f1f1f; display: flex; align-items: center; gap: 6px; }
+        .simple-tag-badge { font-size: 0.75rem; background: #e6f4ff; color: #1677ff; padding: 2px 8px; border-radius: 10px; font-weight: normal; }
+        .simple-info p { font-size: 0.8rem; color: #8c8c8c; margin-top: 2px; }
+        .btn-view-profile { background: #f5f5f5; color: #595959; padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
+        .simple-card:hover { border-color: #1677ff; }
+        .simple-card:hover .btn-view-profile { background: #1677ff; color: white; }
+
+        .empty-tip { text-align: center; color: #bfbfbf; padding: 40px 20px; background: #ffffff; border-radius: 14px; border: 1px dashed #d9d9d9; font-size: 0.9rem; }
+
+        /* ==================== 独立个人全屏主页样式 (全字段+双自定义) ==================== */
+        #profile_view { 
+            display: none; 
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+            background-size: cover; background-position: center; background-repeat: no-repeat;
+            z-index: 999; padding: 20px; overflow-y: auto;
+        }
+        .full-mask { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0, 0, 0, 0.55); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); 
+            z-index: 1;
+        }
+        .profile-content { position: relative; z-index: 2; max-width: 500px; margin: 20px auto 0 auto; color: white; text-align: center; }
+        .btn-close-profile { display: inline-block; background: rgba(255,255,255,0.2); color: white; padding: 8px 18px; border-radius: 20px; font-size: 0.85rem; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.25); font-weight: bold; }
+        
+        .profile-avatar-large { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; background: #ffffff; margin: 0 auto 12px auto; display: block; box-shadow: 0 6px 20px rgba(0,0,0,0.3); border: 3px solid rgba(255,255,255,0.6); }
+        
+        .user-header h2 { font-size: 2rem; font-weight: bold; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        .user-tag { display: inline-block; font-size: 0.8rem; background: #1677ff; padding: 2px 10px; border-radius: 10px; margin-top: 4px; font-weight: 600; }
+        
+        .info-block { background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 16px; padding: 16px; margin-top: 16px; text-align: left; }
+        .info-block h3 { font-size: 0.95rem; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 4px; color: #1677ff; font-weight: bold; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+        .user-item { display: flex; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.9rem; }
+        .user-item:last-child { border-bottom: none; }
+        .user-label { width: 35%; opacity: 0.7; font-weight: bold; }
+        .user-val { width: 65%; font-weight: 500; word-break: break-all; }
+        
+        .motto-box { background: rgba(0, 0, 0, 0.25); border-left: 4px solid #722ed1; padding: 14px; border-radius: 0 12px 12px 0; margin-top: 16px; font-style: italic; font-size: 0.95rem; text-align: left; }
+        .motto-box small { display: block; font-style: normal; opacity: 0.5; font-size: 0.75rem; margin-bottom: 4px; }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="home_view">
+        <div class="class-card">
+            <div class="class-photo" style="background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=640');">
+                <div class="class-title">
+                    <h1>经开一中初2026届11班同学录</h1>
+                    <p>青春不散场 · 2026</p>
+                </div>
+            </div>
+            <div class="class-details">
+                <div class="class-motto">“常回来看，不管走多远，这里永远是大家的港湾。”</div>
+                <div class="class-stats">
+                    <span>毕业人数: 50 人</span>
+                    <span>已入驻档案: <strong id="stats_count">0</strong> 人</span>
+                </div>
+            </div>
+        </div>
+
+        <a href="form.html" class="btn-go-form">✍ 同学录｜建立我的专属档案</a>
+
+        <div class="list-title">👥 已经入驻的同学档案</div>
+        <div class="alumni-list" id="alumni_container">
+            <div class="empty-tip" id="empty_tip">
+                还没有同学填写档案哦，快去当第一个吧！
+            </div>
+        </div>
+    </div>
+
+    <div id="profile_view">
+        <div class="full-mask"></div>
+        <div class="profile-content">
+            <a href="index.html" class="btn-close-profile">⬅️ 返回班级首页</a>
+            
+            <img src="" class="profile-avatar-large" id="u_avatar" alt="头像">
+            
+            <div class="user-header">
+                <h2 id="u_name">姓名</h2>
+                <span class="user-tag" id="u_tag">绰号</span>
+            </div>
+            
+            <div class="info-block">
+                <h3>📌 基础联络档案</h3>
+                <div class="user-item"><div class="user-label">出生日期</div><div class="user-val" id="u_birthday"></div></div>
+                <div class="user-item"><div class="user-label">专属星座</div><div class="user-val" id="u_constellation"></div></div>
+                <div class="user-item"><div class="user-label">联络微信号</div><div class="user-val" id="u_wechat"></div></div>
+                <div class="user-item"><div class="user-label">QQ 账号</div><div class="user-val" id="u_qq"></div></div>
+                <div class="user-item"><div class="user-label">电话号码</div><div class="user-val" id="u_phone"></div></div>
+                <div class="user-item"><div class="user-label">电子邮箱
