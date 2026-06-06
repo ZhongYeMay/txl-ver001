@@ -4,26 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>建立我的个人主页</title>
+    <!-- 引入 Supabase 官方极速控制库 -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif; background-color: #f7f9fc; color: #262626; padding-bottom: 40px; }
         .container { width: 100%; max-width: 640px; margin: 0 auto; padding: 16px; }
-        
         .header-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
         .btn-back { color: #1677ff; text-decoration: none; font-size: 0.95rem; }
-
         .card-panel { background: #ffffff; padding: 20px; border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); margin-bottom: 20px; }
         .card-panel h2 { font-size: 1.3rem; margin-bottom: 16px; color: #1f1f1f; border-bottom: 2px solid #f0f0f0; padding-bottom: 6px; }
         .panel-section-title { font-size: 0.95rem; color: #1677ff; font-weight: bold; margin: 15px 0 10px 0; display: flex; align-items: center; gap: 4px; }
-
         .form-group { margin-bottom: 14px; }
         .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 6px; color: #434343; }
         .form-group input[type="text"], .form-group input[type="tel"], .form-group input[type="email"], .form-group textarea { width: 100%; padding: 11px; border: 1px solid #d9d9d9; border-radius: 8px; font-size: 0.95rem; background: #fafafa; transition: all 0.2s; }
         .form-group input:focus, .form-group textarea:focus { border-color: #1677ff; background: #ffffff; outline: none; }
-
         .preview-box { background: #f9f9f9; border: 1px dashed #d9d9d9; border-radius: 12px; padding: 12px; margin: 20px 0; }
         .preview-title { font-size: 0.8rem; color: #8c8c8c; margin-bottom: 12px; text-align: center; }
-        
         .alumni-card-full { 
             background: #8c8c8c; border-radius: 14px; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.05); 
             min-height: 300px; padding: 20px; background-size: cover; background-position: center; position: relative;
@@ -31,14 +28,13 @@
             text-align: center;
         }
         .alumni-card-full::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.45); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 1; }
-        
         .pre-content-inner { position: relative; z-index: 2; color: white; width: 100%; }
         .pre-avatar-img { width: 74px; height: 74px; border-radius: 50%; object-fit: cover; background: #ffffff; margin: 0 auto 8px auto; display: block; border: 2px solid rgba(255,255,255,0.6); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
         .pre-name { font-size: 1.4rem; font-weight: bold; }
         .pre-tag { display: inline-block; font-size: 0.75rem; background: #1677ff; color: white; padding: 2px 10px; border-radius: 10px; margin-top: 4px; font-weight: bold; }
         .pre-meta-scroll { margin-top: 10px; font-size: 0.8rem; text-align: left; background: rgba(255,255,255,0.1); border-radius: 8px; padding: 10px; max-height: 120px; overflow-y: auto; }
-        
         .btn-submit { width: 100%; padding: 14px; background: #1677ff; color: #ffffff; border: none; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(22,119,255,0.2); }
+        .btn-submit:disabled { background: #bfbfbf; cursor: not-allowed; }
     </style>
 </head>
 <body>
@@ -64,7 +60,7 @@
             </div>
             <div class="form-group">
                 <label>微信账号 * (作为独立网址访问的第一密钥)</label>
-                <input type="text" id="in_wechat" placeholder="微信与QQ必填一项以生成专属网址链接" required>
+                <input type="text" id="in_wechat" placeholder="微信与QQ必填一项以生成独立访问路由的钥匙" required>
             </div>
             <div class="form-group">
                 <label>QQ 号码 *</label>
@@ -96,10 +92,10 @@
             <div class="panel-section-title">🖼️ 双重多媒体视觉自定义</div>
             <div class="form-group">
                 <label>上传我的专属头像文件 *</label>
-                <input type="file" id="in_avatar" accept="image/*">
+                <input type="file" id="in_avatar" accept="image/*" required>
             </div>
             <div class="form-group">
-                <label>选择整页满铺全屏主页背景图 *</label>
+                <label>选择整页满铺全屏主页背景图</label>
                 <input type="file" id="in_bg" accept="image/*">
             </div>
 
@@ -172,15 +168,14 @@
 </div>
 
 <script>
-    // 字段捕获
+    const SUPABASE_URL = "https://utxqssakhsllhactuggb.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_S3AyeGWqKztJJLGUD9ouDw_IeETOK61";
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     const f = (id) => document.getElementById(id);
     const fields = ['in_name','in_tag','in_avatar','in_bg','in_city','in_wechat','in_qq','in_birthday','in_constellation','in_phone','in_email','in_movie','in_idol','in_color','in_food','in_destination','in_mind','in_dream','in_sig','in_future','in_motto'];
     const refs = {}; fields.forEach(id => refs[id] = f(id));
 
-    let avatarBase64 = "";
-    let bgBase64 = "";
-
-    // 联动预览绑定
     refs.in_name.addEventListener('input', () => f('pre_name').textContent = refs.in_name.value || '未填写');
     refs.in_tag.addEventListener('input', () => f('pre_tag').textContent = refs.in_tag.value || '暂无标签');
     refs.in_birthday.addEventListener('input', () => f('p_birthday').textContent = refs.in_birthday.value || '-');
@@ -192,7 +187,7 @@
         const file = this.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = function() { avatarBase64 = this.result; f('preAvatar').src = avatarBase64; }
+            reader.onload = function() { f('preAvatar').src = this.result; }
             reader.readAsDataURL(file);
         }
     });
@@ -201,54 +196,78 @@
         const file = this.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = function() { bgBase64 = this.result; f('preBanner').style.backgroundImage = `url('${bgBase64}')`; }
+            reader.onload = function() { f('preBanner').style.backgroundImage = `url('${this.result}')`; }
             reader.readAsDataURL(file);
         }
     });
 
-    f('btnSubmit').addEventListener('click', function() {
+    async function uploadToCloud(file, prefix) {
+        if (!file) return null;
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${prefix}_${Date.now()}_${Math.random().toString(36).substring(2,7)}.${fileExt}`;
+        const { data, error } = await _supabase.storage.from('alumni_media').upload(fileName, file);
+        if (error) throw error;
+        const { data: { publicUrl } } = _supabase.storage.from('alumni_media').getPublicUrl(fileName);
+        return publicUrl;
+    }
+
+    f('btnSubmit').addEventListener('click', async function() {
         if (!refs.in_name.value.trim()) { alert("姓名属于档案必填大项！"); return; }
-        if (!refs.in_wechat.value.trim() && !refs.in_qq.value.trim()) { alert("微信号或QQ号至少填写一项，作为生成独立访问路由的钥匙！"); return; }
+        if (!refs.in_wechat.value.trim() && !refs.in_qq.value.trim()) { alert("微信号或QQ号至少填写一项，作为唯一密钥！"); return; }
+        if (!refs.in_avatar.files[0]) { alert("请上传你的专属头像文件！"); return; }
 
-        const model = {
-            name: refs.in_name.value.trim(),
-            tag: refs.in_tag.value.trim(),
-            wechat: refs.in_wechat.value.trim(),
-            qq: refs.in_qq.value.trim(),
-            birthday: refs.in_birthday.value.trim(),
-            constellation: refs.in_constellation.value.trim(),
-            phone: refs.in_phone.value.trim(),
-            email: refs.in_email.value.trim(),
-            city: refs.in_city.value.trim(),
-            movie: refs.in_movie.value.trim(),
-            idol: refs.in_idol.value.trim(),
-            color: refs.in_color.value.trim(),
-            food: refs.in_food.value.trim(),
-            destination: refs.in_destination.value.trim(),
-            mind: refs.in_mind.value.trim(),
-            dream: refs.in_dream.value.trim(),
-            signature: refs.in_sig.value.trim(),
-            future: refs.in_future.value.trim(),
-            motto: refs.in_motto.value.trim(),
-            avatarImage: avatarBase64,
-            backgroundImage: bgBase64
-        };
+        const btn = f('btnSubmit');
+        btn.disabled = true;
+        btn.textContent = "🚀 头像与背景冲向云端中...";
 
-        let list = JSON.parse(localStorage.getItem('alumni_list')) || [];
-        // 用微信号或QQ作为唯一凭证，防止相同标识的卡片重复
-        const primaryKey = model.wechat || model.qq;
-        const targetIdx = list.findIndex(item => (item.wechat === primaryKey || item.qq === primaryKey));
-        
-        if (targetIdx !== -1) {
-            list[targetIdx] = model;
-        } else {
-            list.push(model);
+        try {
+            const avatarUrl = await uploadToCloud(refs.in_avatar.files[0], 'avatar');
+            const bgUrl = await uploadToCloud(refs.in_bg.files[0], 'bg');
+
+            const model = {
+                name: refs.in_name.value.trim(),
+                nickname: refs.in_tag.value.trim(),
+                wechat: refs.in_wechat.value.trim(),
+                qq: refs.in_qq.value.trim(),
+                birthday: refs.in_birthday.value.trim(),
+                constellation: refs.in_constellation.value.trim(),
+                phone: refs.in_phone.value.trim(),
+                email: refs.in_email.value.trim(),
+                city: refs.in_city.value.trim(),
+                movie: refs.in_movie.value.trim(),
+                idol: refs.in_idol.value.trim(),
+                color: refs.in_color.value.trim(),
+                food: refs.in_food.value.trim(),
+                destination: refs.in_destination.value.trim(),
+                mind: refs.in_mind.value.trim(),
+                dream: refs.in_dream.value.trim(),
+                message: refs.in_sig.value.trim(),
+                future: refs.in_future.value.trim(),
+                motto: refs.in_motto.value.trim() || '行远自迩，笃行不怠',
+                avatar_url: avatarUrl,
+                bg_url: bgUrl || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800'
+            };
+
+            const primaryKey = model.wechat || model.qq;
+            const { data: existing } = await _supabase.from('alumni_list').select('id').or(`wechat.eq.${primaryKey},qq.eq.${primaryKey}`);
+            
+            if (existing && existing.length > 0) {
+                const { error } = await _supabase.from('alumni_list').update(model).eq('id', existing[0].id);
+                if (error) throw error;
+            } else {
+                const { error } = await _supabase.from('alumni_list').insert([model]);
+                if (error) throw error;
+            }
+
+            // 完全不改文件名，精准跳转到原装英文 success.html 页面
+            window.location.href = 'success.html';
+
+        } catch (err) {
+            alert("同步至云端失败，原因: " + err.message);
+            btn.disabled = false;
+            btn.textContent = "上传同步至云端本地库";
         }
-
-        localStorage.setItem('alumni_list', JSON.stringify(list));
-        window.location.href = 'success.html';
     });
 </script>
-
 </body>
 </html>

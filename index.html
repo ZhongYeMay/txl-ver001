@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>初2026届11班｜专属同学录</title>
+    <!-- 引入 Supabase 官方极速控制库 -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif; background-color: #f7f9fc; color: #262626; padding-bottom: 50px; }
         .container { width: 100%; max-width: 640px; margin: 0 auto; padding: 16px; }
         a { text-decoration: none; }
         
-        /* ==================== 班级首页样式 ==================== */
-        #home_view { display: block; }
         .class-card { background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.04); margin-bottom: 20px; }
         .class-photo { width: 100%; height: 180px; background: linear-gradient(135deg, #1677ff 0%, #722ed1 100%); background-size: cover; background-position: center; position: relative; display: flex; align-items: flex-end; padding: 16px; }
         .class-photo::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.35); }
@@ -27,7 +27,7 @@
         .list-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 12px; color: #1f1f1f; }
         .alumni-list { display: flex; flex-direction: column; gap: 16px; }
         
-        .simple-card { background: white; padding: 16px; border-radius: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); display: flex; justify-content: space-between; align-items: center; border: 1px solid #f0f0f0; transition: all 0.2s; }
+        .simple-card { background: white; padding: 16px; border-radius: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); display: flex; justify-content: space-between; align-items: center; border: 1px solid #f0f0f0; transition: all 0.2s; cursor: pointer; }
         .simple-main { display: flex; align-items: center; gap: 12px; }
         .simple-avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; background: #e8e8e8; border: 1px solid #e1e1e1; }
         .simple-info h3 { font-size: 1.1rem; color: #1f1f1f; display: flex; align-items: center; gap: 6px; }
@@ -37,9 +37,8 @@
         .simple-card:hover { border-color: #1677ff; }
         .simple-card:hover .btn-view-profile { background: #1677ff; color: white; }
 
-        .empty-tip { text-align: center; color: #bfbfbf; padding: 40px 20px; background: #ffffff; border-radius: 14px; border: 1px dashed #d9d9d9; font-size: 0.9rem; }
+        .empty-tip { text-align: center; color: #bfbfbf; padding: 40px 20px; background: #ffffff; border-radius: 14px; border: 1px dashed #d9d9d9; font-size: 0.9rem; width: 100%; }
 
-        /* ==================== 独立个人全屏主页样式 (全字段+双自定义) ==================== */
         #profile_view { 
             display: none; 
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
@@ -52,7 +51,7 @@
             z-index: 1;
         }
         .profile-content { position: relative; z-index: 2; max-width: 500px; margin: 20px auto 0 auto; color: white; text-align: center; }
-        .btn-close-profile { display: inline-block; background: rgba(255,255,255,0.2); color: white; padding: 8px 18px; border-radius: 20px; font-size: 0.85rem; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.25); font-weight: bold; }
+        .btn-close-profile { display: inline-block; background: rgba(255,255,255,0.2); color: white; padding: 8px 18px; border-radius: 20px; font-size: 0.85rem; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.25); font-weight: bold; cursor: pointer; }
         
         .profile-avatar-large { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; background: #ffffff; margin: 0 auto 12px auto; display: block; box-shadow: 0 6px 20px rgba(0,0,0,0.3); border: 3px solid rgba(255,255,255,0.6); }
         
@@ -60,7 +59,7 @@
         .user-tag { display: inline-block; font-size: 0.8rem; background: #1677ff; padding: 2px 10px; border-radius: 10px; margin-top: 4px; font-weight: 600; }
         
         .info-block { background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 16px; padding: 16px; margin-top: 16px; text-align: left; }
-        .info-block h3 { font-size: 0.95rem; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 4px; color: #1677ff; font-weight: bold; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
+        .info-block h3 { font-size: 0.95rem; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 4px; color: #00e6ff; font-weight: bold; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
         .user-item { display: flex; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.9rem; }
         .user-item:last-child { border-bottom: none; }
         .user-label { width: 35%; opacity: 0.7; font-weight: bold; }
@@ -93,16 +92,15 @@
 
         <div class="list-title">👥 已经入驻的同学档案</div>
         <div class="alumni-list" id="alumni_container">
-            <div class="empty-tip" id="empty_tip">
-                还没有同学填写档案哦，快去当第一个吧！
-            </div>
+            <div class="empty-tip" id="empty_tip">正在跨越公网，全力读取云端班级档案中...</div>
         </div>
     </div>
 
+    <!-- 全字段华丽独立个人主页弹窗 -->
     <div id="profile_view">
         <div class="full-mask"></div>
         <div class="profile-content">
-            <a href="index.html" class="btn-close-profile">⬅️ 返回班级首页</a>
+            <div class="btn-close-profile" onclick="closeProfile()">⬅️ 返回班级首页</div>
             
             <img src="" class="profile-avatar-large" id="u_avatar" alt="头像">
             
@@ -118,4 +116,104 @@
                 <div class="user-item"><div class="user-label">联络微信号</div><div class="user-val" id="u_wechat"></div></div>
                 <div class="user-item"><div class="user-label">QQ 账号</div><div class="user-val" id="u_qq"></div></div>
                 <div class="user-item"><div class="user-label">电话号码</div><div class="user-val" id="u_phone"></div></div>
-                <div class="user-item"><div class="user-label">电子邮箱
+                <div class="user-item"><div class="user-label">电子邮箱</div><div class="user-val" id="u_email"></div></div>
+                <div class="user-item"><div class="user-label">现居城市</div><div class="user-val" id="u_city"></div></div>
+            </div>
+
+            <div class="info-block">
+                <h3>🎨 个人偏好风向标</h3>
+                <div class="user-item"><div class="user-label">喜欢的电影</div><div class="user-val" id="u_movie"></div></div>
+                <div class="user-item"><div class="user-label">喜欢的偶像</div><div class="user-val" id="u_idol"></div></div>
+                <div class="user-item"><div class="user-label">喜欢的颜色</div><div class="user-val" id="u_color"></div></div>
+                <div class="user-item"><div class="user-label">喜欢的食物</div><div class="user-val" id="u_food"></div></div>
+                <div class="user-item"><div class="user-label">想去的远方</div><div class="user-val" id="u_destination"></div></div>
+            </div>
+
+            <div class="info-block">
+                <h3>🔮 深度心灵树洞</h3>
+                <div class="user-item"><div class="user-label">你心中的我</div><div class="user-val" id="u_mind"></div></div>
+                <div class="user-item"><div class="user-label">心中的梦想</div><div class="user-val" id="u_dream"></div></div>
+                <div class="user-item"><div class="user-label">十年后的自己</div><div class="user-val" id="u_future"></div></div>
+                <div class="user-item"><div class="user-label">毕业寄语</div><div class="user-val" id="u_message"></div></div>
+            </div>
+
+            <div class="motto-box">
+                <small>🎤 个人座右铭 MOTTO</small>
+                <span id="u_motto">行远自迩，笃行不怠</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SUPABASE_URL = "https://utxqssakhsllhactuggb.supabase.co";
+        const SUPABASE_ANON_KEY = "sb_publishable_S3AyeGWqKztJJLGUD9ouDw_IeETOK61";
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let cloudCacheData = [];
+
+        async function fetchCloudAlumni() {
+            try {
+                const { data, error } = await _supabase.from('alumni_list').select('*').order('created_at', { ascending: false });
+                if (error) throw error;
+
+                cloudCacheData = data;
+                document.getElementById('stats_count').innerText = data.length;
+
+                const container = document.getElementById('alumni_container');
+                container.innerHTML = '';
+
+                if (data.length === 0) {
+                    container.innerHTML = '<div class="empty-tip">还没有同学填写档案哦，快去当第一个吧！</div>';
+                    return;
+                }
+
+                data.forEach((item, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'simple-card';
+                    card.onclick = () => openProfile(index);
+                    card.innerHTML = `
+                        <div class="simple-main">
+                            <img class="simple-avatar" src="${item.avatar_url}">
+                            <div class="simple-info">
+                                <h3>${item.name} ${item.nickname ? `<span class="simple-tag-badge">${item.nickname}</span>` : ''}</h3>
+                                <p>🔮 格言：${item.motto || '未填写'}</p>
+                            </div>
+                        </div>
+                        <div class="btn-view-profile">查看主页</div>
+                    `;
+                    container.appendChild(card);
+                });
+
+            } catch (err) {
+                document.getElementById('alumni_container').innerHTML = `<div class="empty-tip" style="color:red;">云端数据同步失败: ${err.message}</div>`;
+            }
+        }
+
+        function openProfile(index) {
+            const u = cloudCacheData[index];
+            const view = document.getElementById('profile_view');
+            
+            view.style.backgroundImage = `url('${u.bg_url}')`;
+            document.getElementById('u_avatar').src = u.avatar_url;
+            document.getElementById('u_name').innerText = u.name;
+            document.getElementById('u_tag').innerText = u.nickname || '同学';
+            
+            const fields = ['birthday','constellation','wechat','qq','phone','email','city','movie','idol','color','food','destination','mind','dream','future','message','motto'];
+            fields.forEach(f => {
+                const el = document.getElementById(`u_${f}`);
+                if(el) el.innerText = u[f] || '未填';
+            });
+
+            view.style.display = 'block';
+            document.getElementById('home_view').style.display = 'none';
+        }
+
+        function closeProfile() {
+            document.getElementById('profile_view').style.display = 'none';
+            document.getElementById('home_view').style.display = 'block';
+        }
+
+        window.onload = fetchCloudAlumni;
+    </script>
+</body>
+</html>
