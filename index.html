@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>初2026届11班｜专属同学录</title>
-    <!-- 引入 Supabase 官方极速控制库 -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -88,7 +87,7 @@
             </div>
         </div>
 
-        <a href="form.html" class="btn-go-form">✍ 同学录｜建立我的专属档案</a>
+        <a href="form.html" id="goFormBtn" class="btn-go-form">✍ 同学录｜建立我的专属档案</a>
 
         <div class="list-title">👥 已经入驻的同学档案</div>
         <div class="alumni-list" id="alumni_container">
@@ -96,7 +95,6 @@
         </div>
     </div>
 
-    <!-- 全字段华丽独立个人主页弹窗 -->
     <div id="profile_view">
         <div class="full-mask"></div>
         <div class="profile-content">
@@ -134,7 +132,7 @@
                 <div class="user-item"><div class="user-label">你心中的我</div><div class="user-val" id="u_mind"></div></div>
                 <div class="user-item"><div class="user-label">心中的梦想</div><div class="user-val" id="u_dream"></div></div>
                 <div class="user-item"><div class="user-label">十年后的自己</div><div class="user-val" id="u_future"></div></div>
-                <div class="user-item"><div class="user-label">毕业寄语</div><div class="user-val" id="u_message"></div></div>
+                <div class="user-item"><div class="user-label">毕业寄语</div><div class="user-val" id="u_signature"></div></div>
             </div>
 
             <div class="motto-box">
@@ -145,6 +143,8 @@
     </div>
 
     <script>
+        document.getElementById('goFormBtn').href = 'form.html?t=' + Date.now();
+
         const SUPABASE_URL = "https://utxqssakhsllhactuggb.supabase.co";
         const SUPABASE_ANON_KEY = "sb_publishable_S3AyeGWqKztJJLGUD9ouDw_IeETOK61";
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -198,7 +198,7 @@
             document.getElementById('u_name').innerText = u.name;
             document.getElementById('u_tag').innerText = u.nickname || '同学';
             
-            const fields = ['birthday','constellation','wechat','qq','phone','email','city','movie','idol','color','food','destination','mind','dream','future','message','motto'];
+            const fields = ['birthday','constellation','wechat','qq','phone','email','city','movie','idol','color','food','destination','mind','dream','future','signature','motto'];
             fields.forEach(f => {
                 const el = document.getElementById(`u_${f}`);
                 if(el) el.innerText = u[f] || '未填';
