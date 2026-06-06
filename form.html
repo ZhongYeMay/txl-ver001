@@ -40,7 +40,7 @@
 
 <div class="container">
     <div class="header-nav">
-        <a href="index.html" class="btn-back">⬅️ 返回首页</a>
+        <a href="index.html" id="backLink" class="btn-back">⬅️ 返回首页</a>
         <span style="font-size:0.9rem; color:#8c8c8c;">全周期同学深度档案卡</span>
     </div>
 
@@ -167,6 +167,9 @@
 </div>
 
 <script>
+    // 强制防首页缓存小尾巴
+    document.getElementById('backLink').href = 'index.html?t=' + Date.now();
+
     const SUPABASE_URL = "https://utxqssakhsllhactuggb.supabase.co";
     const SUPABASE_ANON_KEY = "sb_publishable_S3AyeGWqKztJJLGUD9ouDw_IeETOK61";
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -223,7 +226,6 @@
             const avatarUrl = await uploadToCloud(refs.in_avatar.files[0], 'avatar');
             const bgUrl = await uploadToCloud(refs.in_bg.files[0], 'bg');
 
-            // ⭐ 精准纠正：将 message 改回你代码底层原汁原味的 signature！
             const model = {
                 name: refs.in_name.value.trim(),
                 nickname: refs.in_tag.value.trim(),
@@ -259,7 +261,8 @@
                 if (error) throw error;
             }
 
-            window.location.href = 'success.html';
+            // 带上防缓存的时间戳，直接跳往原装英文 success.html 页面
+            window.location.href = 'success.html?t=' + Date.now();
 
         } catch (err) {
             alert("同步至云端失败，原因: " + err.message);
