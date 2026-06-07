@@ -7,117 +7,151 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        body { font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif; background-color: #f7f9fc; color: #262626; padding-bottom: 50px; }
+        
+        /* ==========================================
+           ☀️ 默认：白天明亮模式（Light Mode）基础配色 
+           ========================================== */
+        body { font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif; background-color: #f0f3f8; color: #1c1c1e; padding-bottom: 50px; transition: background-color 0.3s, color 0.3s; }
         .container { width: 100%; max-width: 640px; margin: 0 auto; padding: 16px; }
         a { text-decoration: none; }
         
-        .class-card { background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.04); margin-bottom: 20px; }
-        
-        .class-photo { 
-            width: 100%; 
-            height: 180px; 
-            background-size: cover; 
-            background-position: center; 
-            position: relative; 
-            display: flex; 
-            align-items: flex-end; 
-            padding: 16px; 
-        }
-        .class-photo::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.35); }
-        .class-title { color: #ffffff; position: relative; z-index: 1; }
-        .class-title h1 { font-size: 1.6rem; font-weight: bold; }
-        .class-title p { font-size: 0.85rem; opacity: 0.85; margin-top: 2px; }
+        .class-card { background: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .class-photo { width: 100%; padding: 24px 20px; background: linear-gradient(135deg, #007aff 0%, #1d4ed8 100%); display: flex; align-items: flex-end; }
+        .class-title { color: #ffffff; }
+        .class-title h1 { font-size: 1.5rem; font-weight: 700; }
+        .class-title p { font-size: 0.85rem; opacity: 0.85; margin-top: 3px; font-weight: 500; }
         .class-details { padding: 16px; }
-        .class-motto { font-size: 0.9rem; color: #595959; font-style: italic; border-left: 3px solid #1677ff; padding-left: 10px; margin-bottom: 12px; }
-        .class-stats { display: flex; justify-content: space-between; background: #f5f5f5; padding: 8px 16px; border-radius: 8px; font-size: 0.85rem; color: #8c8c8c; }
-        .class-stats strong { color: #1677ff; }
+        .class-motto { font-size: 0.9rem; color: #3a3a3c; font-style: italic; border-left: 3px solid #007aff; padding-left: 10px; margin-bottom: 12px; font-weight: 500; }
+        .class-stats { display: flex; justify-content: space-between; background: #f2f2f7; padding: 10px 16px; border-radius: 12px; font-size: 0.85rem; color: #8e8e93; }
+        .class-stats strong { color: #007aff; font-weight: 600; }
 
-        .btn-go-form { display: block; width: 100%; text-align: center; background: #1677ff; color: #ffffff; padding: 14px; border-radius: 12px; font-size: 1.05rem; font-weight: bold; margin-bottom: 24px; box-shadow: 0 4px 14px rgba(22,119,255,0.25); }
-        .list-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 12px; color: #1f1f1f; }
-        .alumni-list { display: flex; flex-direction: column; gap: 16px; }
+        .btn-go-form { display: block; width: 100%; text-align: center; background: #007aff; color: #ffffff; padding: 15px; border-radius: 14px; font-size: 1.05rem; font-weight: 600; margin-bottom: 24px; box-shadow: 0 4px 14px rgba(0,122,255,0.2); transition: all 0.2s; }
         
-        .simple-card { background: white; padding: 16px; border-radius: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); display: flex; justify-content: space-between; align-items: center; border: 1px solid #f0f0f0; transition: all 0.2s; cursor: pointer; }
-        .simple-main { display: flex; align-items: center; gap: 12px; }
-        .simple-avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; background: #e8e8e8; border: 1px solid #e1e1e1; }
-        .simple-info h3 { font-size: 1.1rem; color: #1f1f1f; display: flex; align-items: center; gap: 6px; }
-        .simple-tag-badge { font-size: 0.75rem; background: #e6f4ff; color: #1677ff; padding: 2px 8px; border-radius: 10px; font-weight: normal; }
-        .simple-info p { font-size: 0.8rem; color: #8c8c8c; margin-top: 2px; }
-        .btn-view-profile { background: #f5f5f5; color: #595959; padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
-        .simple-card:hover { border-color: #1677ff; }
-        .simple-card:hover .btn-view-profile { background: #1677ff; color: white; }
+        .list-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 14px; color: #1c1c1e; padding-left: 4px; }
+        .alumni-list { display: flex; flex-direction: column; gap: 14px; }
+        
+        .simple-card { background: white; padding: 16px; border-radius: 16px; box-shadow: 0 4px 14px rgba(0,0,0,0.02); display: flex; justify-content: space-between; align-items: center; border: 1px solid #e5e5ea; cursor: pointer; }
+        .simple-main { display: flex; align-items: center; gap: 14px; }
+        .simple-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; background: #e5e5ea; border: 1px solid #d1d1d6; }
+        .simple-info h3 { font-size: 1.1rem; color: #1c1c1e; display: flex; align-items: center; gap: 6px; font-weight: 600; }
+        .simple-tag-badge { font-size: 0.75rem; background: #e5f1ff; color: #007aff; padding: 2px 8px; border-radius: 10px; font-weight: 500; }
+        .simple-info p { font-size: 0.8rem; color: #8e8e93; margin-top: 3px; }
+        .btn-view-profile { background: #f2f2f7; color: #007aff; padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
 
-        .empty-tip { text-align: center; color: #bfbfbf; padding: 40px 20px; background: #ffffff; border-radius: 14px; border: 1px dashed #d9d9d9; font-size: 0.9rem; width: 100%; }
+        .empty-tip { text-align: center; color: #c7c7cc; padding: 40px 20px; background: #ffffff; border-radius: 16px; border: 1px dashed #d1d1d6; font-size: 0.9rem; width: 100%; }
 
-        #profile_view { 
-            display: none; 
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
-            background-size: cover; background-position: center; background-repeat: no-repeat;
-            z-index: 999; padding: 20px; overflow-y: auto;
-        }
-        .full-mask { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0, 0, 0, 0.45); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); 
-            z-index: 1;
-        }
-        .profile-content { position: relative; z-index: 2; max-width: 500px; margin: 20px auto 0 auto; color: white; text-align: center; padding-bottom: 40px; }
-        .btn-close-profile { display: inline-block; background: rgba(255,255,255,0.2); color: white; padding: 8px 18px; border-radius: 20px; font-size: 0.85rem; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.25); font-weight: bold; cursor: pointer; }
+        /* 白天模式：主页弹窗与个人卡片 */
+        #profile_view { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-size: cover; background-position: center; background-repeat: no-repeat; z-index: 999; padding: 20px; overflow-y: auto; }
+        .full-mask { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.25); z-index: 1; }
+        .profile-content { position: relative; z-index: 2; max-width: 500px; margin: 10px auto 0 auto; color: #1c1c1e; text-align: center; padding-bottom: 40px; }
+        .btn-close-profile { display: inline-block; background: rgba(255,255,255,0.7); color: #1c1c1e; padding: 8px 20px; border-radius: 20px; font-size: 0.85rem; margin-bottom: 24px; border: 1px solid rgba(0,0,0,0.1); font-weight: 600; cursor: pointer; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .profile-avatar-large { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; background: #ffffff; margin: 0 auto 12px auto; display: block; box-shadow: 0 8px 24px rgba(0,0,0,0.15); border: 3px solid rgba(255,255,255,0.8); }
+        .user-header h2 { font-size: 2rem; font-weight: 700; text-shadow: 0 1px 4px rgba(255,255,255,0.8); }
+        .user-tag { display: inline-block; font-size: 0.8rem; background: #007aff; color: white; padding: 2px 10px; border-radius: 10px; margin-top: 4px; font-weight: 600; }
         
-        .profile-avatar-large { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; background: #ffffff; margin: 0 auto 12px auto; display: block; box-shadow: 0 6px 20px rgba(0,0,0,0.3); border: 3px solid rgba(255,255,255,0.6); }
-        
-        .user-header h2 { font-size: 2rem; font-weight: bold; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-        .user-tag { display: inline-block; font-size: 0.8rem; background: #1677ff; padding: 2px 10px; border-radius: 10px; margin-top: 4px; font-weight: 600; }
-        
+        /* 白天模式的：极透液态玻璃卡片（白底高亮） */
         .info-block { 
-            background: rgba(20, 20, 20, 0.78); 
-            border: 1px solid rgba(255, 255, 255, 0.15); 
-            border-radius: 16px; 
-            padding: 16px; 
-            margin-top: 16px; 
-            text-align: left; 
-            backdrop-filter: blur(25px) saturate(180%);
-            -webkit-backdrop-filter: blur(25px) saturate(180%);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.65) 0%, rgba(255, 255, 255, 0.35) 100%); 
+            border-top: 1.5px solid rgba(255, 255, 255, 0.7);  
+            border-left: 1.5px solid rgba(255, 255, 255, 0.5); 
+            border-radius: 24px; padding: 20px; margin-top: 16px; text-align: left; 
+            backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255,255,255,0.4); 
         }
-        .info-block h3 { font-size: 0.95rem; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 4px; color: #00e6ff; font-weight: bold; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
-        .user-item { display: flex; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.9rem; }
+        .info-block h3 { font-size: 1rem; margin-bottom: 12px; border-bottom: 1px solid rgba(0,0,0,0.08); padding-bottom: 6px; color: #0055ff; font-weight: 700; }
+        .user-item { display: flex; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.04); font-size: 0.9rem; }
         .user-item:last-child { border-bottom: none; }
-        .user-label { width: 35%; opacity: 0.7; font-weight: bold; }
-        .user-val { width: 65%; font-weight: 500; word-break: break-all; color: #ffffff; }
+        .user-label { width: 35%; color: #636366; font-weight: 700; }
+        .user-val { width: 65%; font-weight: 500; word-break: break-all; color: #1c1c1e; }
         
         .motto-box { 
-            background: rgba(0, 0, 0, 0.8); 
-            border-left: 4px solid #722ed1; 
-            padding: 14px; 
-            border-radius: 0 12px 12px 0; 
-            margin-top: 16px; 
-            font-style: italic; 
-            font-size: 0.95rem; 
-            text-align: left; 
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.4) 100%);
+            border-top: 1.5px solid rgba(255, 255, 255, 0.6); border-left: 6px solid #af52de;
+            padding: 16px; border-radius: 16px; margin-top: 16px; font-style: italic; font-size: 0.95rem; text-align: left; 
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); box-shadow: 0 4px 16px rgba(0,0,0,0.04);
         }
-        .motto-box small { display: block; font-style: normal; opacity: 0.5; font-size: 0.75rem; margin-bottom: 4px; }
+        .motto-box small { display: block; font-style: normal; color: #8e8e93; font-size: 0.75rem; margin-bottom: 5px; font-weight: 600; }
 
-        /* 💬 新增：评价功能专属样式 */
-        .comment-item { padding: 10px 0; border-bottom: 1px dashed rgba(255,255,255,0.1); font-size: 0.9rem; }
+        .comment-item { padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.05); font-size: 0.9rem; }
         .comment-item:last-child { border-bottom: none; }
-        .comment-meta { font-size: 0.8rem; color: #00e6ff; font-weight: bold; margin-bottom: 3px; display: flex; justify-content: space-between; }
-        .comment-time { color: rgba(255,255,255,0.4); font-weight: normal; }
-        .comment-text { color: #ffffff; line-height: 1.4; word-break: break-all; }
+        .comment-meta { font-size: 0.8rem; color: #0055ff; font-weight: 700; margin-bottom: 4px; display: flex; justify-content: space-between; }
+        .comment-time { color: #8e8e93; font-weight: normal; }
+        .comment-text { color: #1c1c1e; line-height: 1.4; word-break: break-all; }
         
-        .comment-form { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
-        .comment-input-name { width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; font-size: 0.85rem; }
-        .comment-input-text { width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; font-size: 0.85rem; resize: none; }
-        .comment-input-name::placeholder, .comment-input-text::placeholder { color: rgba(255,255,255,0.4); }
-        .comment-btn-submit { background: #1677ff; color: white; border: none; padding: 8px; border-radius: 8px; font-weight: bold; font-size: 0.85rem; cursor: pointer; }
+        .comment-form { margin-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+        .comment-input-name { width: 100%; padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(0,0,0,0.15); background: rgba(255,255,255,0.7); color: #1c1c1e; font-size: 0.85rem; }
+        .comment-input-text { width: 100%; padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(0,0,0,0.15); background: rgba(255,255,255,0.7); color: #1c1c1e; font-size: 0.85rem; resize: none; }
+        .comment-input-name::placeholder, .comment-input-text::placeholder { color: #a1a1aa; }
+        .comment-btn-submit { background: #007aff; color: white; border: none; padding: 10px; border-radius: 10px; font-weight: 600; font-size: 0.85rem; cursor: pointer; box-shadow: 0 4px 10px rgba(0,122,255,0.15); }
         .comment-btn-submit:disabled { background: #555; }
+
+
+        /* ==========================================
+           🌙 绝杀：当探测到设备开启【深色/夜间模式】时自动触发 
+           ========================================== */
+        @media (prefers-color-scheme: dark) {
+            body { background-color: #0c0c0e; color: #f5f5f7; }
+            
+            /* 首页组件变暗 */
+            .class-card { background: #1c1c1e; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+            .class-motto { color: #e5e5ea; border-left-color: #0a84ff; }
+            .class-stats { background: #2c2c2e; color: #aeaeae; }
+            .class-stats strong { color: #0a84ff; }
+            .btn-go-form { background: #0a84ff; box-shadow: 0 4px 14px rgba(10,132,255,0.25); }
+            .list-title { color: #f5f5f7; }
+            .simple-card { background: #1c1c1e; border-color: #2c2c2e; box-shadow: 0 4px 14px rgba(0,0,0,0.15); }
+            .simple-info h3 { color: #f5f5f7; }
+            .simple-tag-badge { background: #1c3d5a; color: #40a9ff; }
+            .simple-info p { color: #8e8e93; }
+            .btn-view-profile { background: #2c2c2e; color: #0a84ff; }
+            .empty-tip { background: #1c1c1e; border-color: #2c2c2e; color: #636366; }
+
+            /* 弹窗遮罩变暗 */
+            .full-mask { background: rgba(0, 0, 0, 0.25); }
+            .profile-content { color: white; }
+            .btn-close-profile { background: rgba(0,0,0,0.3); color: white; border: 1px solid rgba(255,255,255,0.2); }
+            .user-header h2 { text-shadow: 0 2px 12px rgba(0,0,0,0.5); }
+            
+            /* 🌊 切换为：极致高透暗黑流体玻璃卡片（黑底霓虹反光） */
+            .info-block { 
+                background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%); 
+                border-top: 1.5px solid rgba(255, 255, 255, 0.5);  
+                border-left: 1.5px solid rgba(255, 255, 255, 0.35); 
+                border-right: 1px solid rgba(255, 255, 255, 0.08);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+                backdrop-filter: blur(22px) saturate(220%) contrast(105%); 
+                -webkit-backdrop-filter: blur(22px) saturate(220%) contrast(105%);
+                box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.15); 
+            }
+            .info-block h3 { border-bottom: 1px solid rgba(255,255,255,0.2); color: #00ffcc; text-shadow: 0 1px 4px rgba(0,0,0,0.5); }
+            .user-item { border-bottom: 1px solid rgba(255,255,255,0.08); }
+            .user-label { color: rgba(255, 255, 255, 0.85); text-shadow: 0 1px 3px rgba(0,0,0,0.4); }
+            .user-val { color: #ffffff; text-shadow: 0 1px 3px rgba(0,0,0,0.4); }
+            
+            .motto-box { 
+                background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.01) 100%);
+                border-top: 1.5px solid rgba(255, 255, 255, 0.45); border-left-color: #bf5af2;
+                backdrop-filter: blur(15px) saturate(200%); -webkit-backdrop-filter: blur(15px) saturate(200%);
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            }
+            .motto-box small { color: rgba(255,255,255,0.7); }
+
+            .comment-item { border-bottom: 1px solid rgba(255,255,255,0.1); }
+            .comment-meta { color: #00ffcc; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+            .comment-text { color: #ffffff; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+            
+            .comment-input-name, .comment-input-text { border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.12); color: white; }
+            .comment-input-name:focus, .comment-input-text:focus { border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.18); }
+            .comment-input-name::placeholder, .comment-input-text::placeholder { color: rgba(255,255,255,0.35); }
+            .comment-btn-submit { background: #0a84ff; box-shadow: 0 4px 10px rgba(10,132,255,0.2); }
+        }
     </style>
 </head>
 <body>
 
     <div class="container" id="home_view">
         <div class="class-card">
-            <div class="class-photo" style="background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=640');">
+            <div class="class-photo">
                 <div class="class-title">
                     <h1>经开一中初2026届11班同学录</h1>
                     <p>青春不散场 · 2026</p>
@@ -192,9 +226,9 @@
                 </div>
                 
                 <div class="comment-form">
-                    <input type="text" id="c_name" class="comment-input-name" placeholder="你的署名大名（如：老王）" required>
+                    <input type="text" id="c_name" class="comment-input-name" placeholder="你的署名大名（如：老张）" required>
                     <textarea id="c_text" class="comment-input-text" rows="2" placeholder="写下你对他的赠言或印象评价吧..." required></textarea>
-                    <button type="button" id="c_submit" class="comment-btn-submit" onclick="submitComment()">✍️ 匿名公开提交评价</button>
+                    <button type="button" id="c_submit" class="comment-btn-submit" onclick="submitComment()">✍️ 公开提交同学评价</button>
                 </div>
             </div>
         </div>
@@ -208,7 +242,7 @@
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let cloudCacheData = [];
-        let currentViewingAlumniId = null; // 当前正在查看的同学云端真实 ID
+        let currentViewingAlumniId = null; 
 
         async function fetchCloudAlumni() {
             try {
@@ -250,7 +284,7 @@
 
         async function openProfile(index) {
             const u = cloudCacheData[index];
-            currentViewingAlumniId = u.id; // 记录当前看的是谁
+            currentViewingAlumniId = u.id; 
             
             const view = document.getElementById('profile_view');
             view.style.backgroundImage = `url('${u.bg_url || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800'}')`;
@@ -264,18 +298,15 @@
                 if(el) el.innerText = u[f] || '未填';
             });
 
-            // 清空评价输入框
             document.getElementById('c_name').value = '';
             document.getElementById('c_text').value = '';
 
-            // 实时拉取属于这位同学的专属评价列表
             await loadComments(u.id);
 
             view.style.display = 'block';
             document.getElementById('home_view').style.display = 'none';
         }
 
-        // 🟢 新增：异步加载属于某个同学的评价
         async function loadComments(alumniId) {
             const listContainer = document.getElementById('comments_list');
             listContainer.innerHTML = '<div style="color: rgba(255,255,255,0.4); font-size: 0.85rem; text-align: center; padding: 10px 0;">正在读取老同学评价中...</div>';
@@ -308,12 +339,11 @@
             }
         }
 
-        // 🟢 新增：提交同学评价按钮动作
         async function submitComment() {
             const name = document.getElementById('c_name').value.trim();
             const text = document.getElementById('c_text').value.trim();
             
-            if (!name || !text) { alert("署名和评价内容都属于必填大项哦！"); return; }
+            if (!name || !text) { alert("署名和评价内容都是必填项！"); return; }
             if (!currentViewingAlumniId) return;
 
             const btn = document.getElementById('c_submit');
@@ -327,15 +357,13 @@
                 if (error) throw error;
 
                 alert("🎉 评价成功！已公开封存进该同学的主页。");
-                document.getElementById('c_text').value = ''; // 刷空文字框
-                
-                // 重新刷新列表展示
+                document.getElementById('c_text').value = ''; 
                 await loadComments(currentViewingAlumniId);
             } catch (err) {
                 alert("评价失败，原因: " + err.message);
             } finally {
                 btn.disabled = false;
-                btn.textContent = "✍️ 匿名公开提交评价";
+                btn.textContent = "✍️ 公开提交同学评价";
             }
         }
 
