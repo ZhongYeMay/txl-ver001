@@ -12,7 +12,17 @@
         a { text-decoration: none; }
         
         .class-card { background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.04); margin-bottom: 20px; }
-        .class-photo { width: 100%; height: 180px; background: linear-gradient(135deg, #1677ff 0%, #722ed1 100%); background-size: cover; background-position: center; position: relative; display: flex; align-items: flex-end; padding: 16px; }
+        
+        .class-photo { 
+            width: 100%; 
+            height: 180px; 
+            background-size: cover; 
+            background-position: center; 
+            position: relative; 
+            display: flex; 
+            align-items: flex-end; 
+            padding: 16px; 
+        }
         .class-photo::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.35); }
         .class-title { color: #ffffff; position: relative; z-index: 1; }
         .class-title h1 { font-size: 1.6rem; font-weight: bold; }
@@ -46,10 +56,10 @@
         }
         .full-mask { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0, 0, 0, 0.55); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); 
+            background: rgba(0, 0, 0, 0.45); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); 
             z-index: 1;
         }
-        .profile-content { position: relative; z-index: 2; max-width: 500px; margin: 20px auto 0 auto; color: white; text-align: center; }
+        .profile-content { position: relative; z-index: 2; max-width: 500px; margin: 20px auto 0 auto; color: white; text-align: center; padding-bottom: 40px; }
         .btn-close-profile { display: inline-block; background: rgba(255,255,255,0.2); color: white; padding: 8px 18px; border-radius: 20px; font-size: 0.85rem; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.25); font-weight: bold; cursor: pointer; }
         
         .profile-avatar-large { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; background: #ffffff; margin: 0 auto 12px auto; display: block; box-shadow: 0 6px 20px rgba(0,0,0,0.3); border: 3px solid rgba(255,255,255,0.6); }
@@ -57,15 +67,50 @@
         .user-header h2 { font-size: 2rem; font-weight: bold; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
         .user-tag { display: inline-block; font-size: 0.8rem; background: #1677ff; padding: 2px 10px; border-radius: 10px; margin-top: 4px; font-weight: 600; }
         
-        .info-block { background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 16px; padding: 16px; margin-top: 16px; text-align: left; }
+        .info-block { 
+            background: rgba(20, 20, 20, 0.78); 
+            border: 1px solid rgba(255, 255, 255, 0.15); 
+            border-radius: 16px; 
+            padding: 16px; 
+            margin-top: 16px; 
+            text-align: left; 
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
         .info-block h3 { font-size: 0.95rem; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 4px; color: #00e6ff; font-weight: bold; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
         .user-item { display: flex; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.9rem; }
         .user-item:last-child { border-bottom: none; }
         .user-label { width: 35%; opacity: 0.7; font-weight: bold; }
-        .user-val { width: 65%; font-weight: 500; word-break: break-all; }
+        .user-val { width: 65%; font-weight: 500; word-break: break-all; color: #ffffff; }
         
-        .motto-box { background: rgba(0, 0, 0, 0.25); border-left: 4px solid #722ed1; padding: 14px; border-radius: 0 12px 12px 0; margin-top: 16px; font-style: italic; font-size: 0.95rem; text-align: left; }
+        .motto-box { 
+            background: rgba(0, 0, 0, 0.8); 
+            border-left: 4px solid #722ed1; 
+            padding: 14px; 
+            border-radius: 0 12px 12px 0; 
+            margin-top: 16px; 
+            font-style: italic; 
+            font-size: 0.95rem; 
+            text-align: left; 
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
         .motto-box small { display: block; font-style: normal; opacity: 0.5; font-size: 0.75rem; margin-bottom: 4px; }
+
+        /* 💬 新增：评价功能专属样式 */
+        .comment-item { padding: 10px 0; border-bottom: 1px dashed rgba(255,255,255,0.1); font-size: 0.9rem; }
+        .comment-item:last-child { border-bottom: none; }
+        .comment-meta { font-size: 0.8rem; color: #00e6ff; font-weight: bold; margin-bottom: 3px; display: flex; justify-content: space-between; }
+        .comment-time { color: rgba(255,255,255,0.4); font-weight: normal; }
+        .comment-text { color: #ffffff; line-height: 1.4; word-break: break-all; }
+        
+        .comment-form { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+        .comment-input-name { width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; font-size: 0.85rem; }
+        .comment-input-text { width: 100%; padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; font-size: 0.85rem; resize: none; }
+        .comment-input-name::placeholder, .comment-input-text::placeholder { color: rgba(255,255,255,0.4); }
+        .comment-btn-submit { background: #1677ff; color: white; border: none; padding: 8px; border-radius: 8px; font-weight: bold; font-size: 0.85rem; cursor: pointer; }
+        .comment-btn-submit:disabled { background: #555; }
     </style>
 </head>
 <body>
@@ -139,6 +184,19 @@
                 <small>🎤 个人座右铭 MOTTO</small>
                 <span id="u_motto">行远自迩，笃行不怠</span>
             </div>
+
+            <div class="info-block">
+                <h3>💬 老同学给我的评价 / 留言板</h3>
+                <div id="comments_list" style="margin-top: 8px; max-height: 250px; overflow-y: auto; text-align: left;">
+                    <div style="color: rgba(255,255,255,0.4); font-size: 0.85rem; text-align: center; padding: 10px 0;">暂无同学留下评价，快来写下第一条吧！</div>
+                </div>
+                
+                <div class="comment-form">
+                    <input type="text" id="c_name" class="comment-input-name" placeholder="你的署名大名（如：老王）" required>
+                    <textarea id="c_text" class="comment-input-text" rows="2" placeholder="写下你对他的赠言或印象评价吧..." required></textarea>
+                    <button type="button" id="c_submit" class="comment-btn-submit" onclick="submitComment()">✍️ 匿名公开提交评价</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -150,6 +208,7 @@
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let cloudCacheData = [];
+        let currentViewingAlumniId = null; // 当前正在查看的同学云端真实 ID
 
         async function fetchCloudAlumni() {
             try {
@@ -173,10 +232,10 @@
                     card.onclick = () => openProfile(index);
                     card.innerHTML = `
                         <div class="simple-main">
-                            <img class="simple-avatar" src="${item.avatar_url}">
+                            <img class="simple-avatar" src="${item.avatar_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200'}">
                             <div class="simple-info">
                                 <h3>${item.name} ${item.nickname ? `<span class="simple-tag-badge">${item.nickname}</span>` : ''}</h3>
-                                <p>🔮 格言：${item.motto || '未填写'}</p>
+                                <p>🔮 格言：${item.motto || '行远自迩，笃行不怠'}</p>
                             </div>
                         </div>
                         <div class="btn-view-profile">查看主页</div>
@@ -185,15 +244,16 @@
                 });
 
             } catch (err) {
-                document.getElementById('alumni_container').innerHTML = `<div class="empty-tip" style="color:red;">云端数据同步失败: ${err.message}</div>`;
+                document.getElementById('alumni_container').innerHTML = `<div class="empty-tip" style="color:red;">云端数据展示失败: ${err.message}</div>`;
             }
         }
 
-        function openProfile(index) {
+        async function openProfile(index) {
             const u = cloudCacheData[index];
-            const view = document.getElementById('profile_view');
+            currentViewingAlumniId = u.id; // 记录当前看的是谁
             
-            view.style.backgroundImage = `url('${u.bg_url}')`;
+            const view = document.getElementById('profile_view');
+            view.style.backgroundImage = `url('${u.bg_url || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800'}')`;
             document.getElementById('u_avatar').src = u.avatar_url;
             document.getElementById('u_name').innerText = u.name;
             document.getElementById('u_tag').innerText = u.nickname || '同学';
@@ -204,8 +264,79 @@
                 if(el) el.innerText = u[f] || '未填';
             });
 
+            // 清空评价输入框
+            document.getElementById('c_name').value = '';
+            document.getElementById('c_text').value = '';
+
+            // 实时拉取属于这位同学的专属评价列表
+            await loadComments(u.id);
+
             view.style.display = 'block';
             document.getElementById('home_view').style.display = 'none';
+        }
+
+        // 🟢 新增：异步加载属于某个同学的评价
+        async function loadComments(alumniId) {
+            const listContainer = document.getElementById('comments_list');
+            listContainer.innerHTML = '<div style="color: rgba(255,255,255,0.4); font-size: 0.85rem; text-align: center; padding: 10px 0;">正在读取老同学评价中...</div>';
+            
+            try {
+                const { data, error } = await _supabase.from('alumni_comments').select('*').eq('alumni_id', alumniId).order('created_at', { ascending: true });
+                if (error) throw error;
+
+                listContainer.innerHTML = '';
+                if (data.length === 0) {
+                    listContainer.innerHTML = '<div style="color: rgba(255,255,255,0.4); font-size: 0.85rem; text-align: center; padding: 10px 0;">暂无同学留下评价，快来写下第一条吧！</div>';
+                    return;
+                }
+
+                data.forEach(c => {
+                    const timeStr = new Date(c.created_at).toLocaleDateString();
+                    const item = document.createElement('div');
+                    item.className = 'comment-item';
+                    item.innerHTML = `
+                        <div class="comment-meta">
+                            <span>✍️ 来自同学 [ ${c.reviewer_name} ] 的评价：</span>
+                            <span class="comment-time">${timeStr}</span>
+                        </div>
+                        <div class="comment-text">${c.comment_text}</div>
+                    `;
+                    listContainer.appendChild(item);
+                });
+            } catch (err) {
+                listContainer.innerHTML = `<div style="color: red; font-size: 0.85rem; text-align: center;">读取失败: ${err.message}</div>`;
+            }
+        }
+
+        // 🟢 新增：提交同学评价按钮动作
+        async function submitComment() {
+            const name = document.getElementById('c_name').value.trim();
+            const text = document.getElementById('c_text').value.trim();
+            
+            if (!name || !text) { alert("署名和评价内容都属于必填大项哦！"); return; }
+            if (!currentViewingAlumniId) return;
+
+            const btn = document.getElementById('c_submit');
+            btn.disabled = true;
+            btn.textContent = "🚀 正在同步写入云端评价...";
+
+            try {
+                const { error } = await _supabase.from('alumni_comments').insert([
+                    { alumni_id: currentViewingAlumniId, reviewer_name: name, comment_text: text }
+                ]);
+                if (error) throw error;
+
+                alert("🎉 评价成功！已公开封存进该同学的主页。");
+                document.getElementById('c_text').value = ''; // 刷空文字框
+                
+                // 重新刷新列表展示
+                await loadComments(currentViewingAlumniId);
+            } catch (err) {
+                alert("评价失败，原因: " + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "✍️ 匿名公开提交评价";
+            }
         }
 
         function closeProfile() {
